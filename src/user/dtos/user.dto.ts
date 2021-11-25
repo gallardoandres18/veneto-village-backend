@@ -4,9 +4,18 @@ import {
   IsNotEmpty,
   IsPositive,
   MaxLength,
+  IsOptional,
 } from 'class-validator';
 
 export class UserDto {
+  @IsOptional()
+  @IsString()
+  readonly name: string;
+
+  @IsOptional()
+  @IsNumber()
+  readonly identityNumber: number;
+
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()

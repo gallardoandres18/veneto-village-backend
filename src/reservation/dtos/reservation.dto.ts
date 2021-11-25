@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsEnum, IsMongoId, IsArray } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEnum,
+  IsMongoId,
+  IsArray,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
 import { TypesOfStadiums } from 'src/types';
 
 export class CreateReservationDTO {
@@ -13,4 +20,13 @@ export class CreateReservationDTO {
   @IsNotEmpty()
   @IsArray()
   readonly hours: string[];
+}
+
+export class FilterReservationDTO {
+  @IsEnum(TypesOfStadiums)
+  @IsNotEmpty()
+  readonly type: TypesOfStadiums;
+
+  @IsOptional()
+  readonly limit: number;
 }

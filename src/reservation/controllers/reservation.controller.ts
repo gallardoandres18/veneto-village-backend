@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TypesOfStadiums } from 'src/types';
-import { CreateReservationDTO } from '../dtos/reservation.dto';
+import {
+  CreateReservationDTO,
+  FilterReservationDTO,
+} from '../dtos/reservation.dto';
 import { ReservationService } from '../services/reservation.service';
 
 @Controller('reservation')
@@ -15,5 +25,15 @@ export class ReservationController {
   @Get('reservated-hours')
   getReservatedHours(@Query('type') type: TypesOfStadiums) {
     return this.reservationService.getReservatedHours(type);
+  }
+
+  @Get('by-type')
+  getByType(@Query() filters: FilterReservationDTO) {
+    return this.reservationService.getByType(filters);
+  }
+
+  @Get()
+  getReservations() {
+    return this.reservationService.getAll();
   }
 }

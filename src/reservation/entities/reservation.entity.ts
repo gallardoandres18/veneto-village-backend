@@ -14,6 +14,9 @@ export class Reservation extends Document {
   @Prop({ required: true, type: Date })
   created: Date;
 
+  @Prop({ required: true, type: Date })
+  startDate: Date;
+
   @Prop({ required: true })
   date: string;
 

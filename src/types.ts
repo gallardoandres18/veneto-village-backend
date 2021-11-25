@@ -8,6 +8,8 @@ export enum TypesOfStadiums {
 }
 
 export interface IUser {
+  name: string;
+  identityNumber: number;
   wing: number;
   tower: number;
   apartment: string;

@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
 
-import { CreateReservationDTO } from '../dtos/reservation.dto';
+import {
+  CreateReservationDTO,
+  FilterReservationDTO,
+} from '../dtos/reservation.dto';
 import { Reservation } from '../entities/reservation.entity';
-import { TypesOfStadiums } from 'src/types';
+import { getDateNowString } from 'src/utils';
 @Injectable()
 export class ReservationService {
   constructor(
@@ -14,16 +15,30 @@ export class ReservationService {
   ) {}
 
   async create(reservation: CreateReservationDTO) {
+    const [hours, minutes] = reservation.hours[0].split(':');
+    const startDate = new Date().setHours(+hours, +minutes, 0, 0);
+
+    const existsReservation = await this.reservationModel
+      .find({
+        type: reservation.type as any,
+        date: getDateNowString(),
+        hours: { $in: reservation.hours },
+      })
+      .count();
+
+    if (Boolean(existsReservation)) {
+      throw new BadRequestException('Algunas de esas horas ya estna ocupadas');
+    }
+
     const reservationDocument = {
       ...reservation,
       created: new Date(),
-      date: new Date()
-        .toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })
-        .split(' ')[0],
+      startDate,
+      date: getDateNowString(),
       enabled: true,
     };
 
-    await this.reservationModel.create(reservationDocument);
+    return await this.reservationModel.create(reservationDocument);
   }
 
   async getReservatedHours(typeOfStadium: any) {
@@ -33,11 +48,7 @@ export class ReservationService {
       .find({
         enabled: true,
         type: typeOfStadium,
-        date: new Date()
-          .toLocaleString('es-AR', {
-            timeZone: 'America/Argentina/Buenos_Aires',
-          })
-          .split(' ')[0],
+        date: getDateNowString(),
       })
       .exec();
 
@@ -46,5 +57,31 @@ export class ReservationService {
     });
 
     return reservatedHours;
+  }
+
+  async getAll() {
+    return await this.reservationModel
+      .find()
+      .populate('user')
+      .sort({ date: 'desc' })
+      .exec();
+  }
+
+  async getByType(filters: FilterReservationDTO) {
+    const { type, limit } = filters;
+    const startDate = new Date().setHours(0, 0, 0, 0);
+    const endDate = new Date().setHours(23, 59, 59, 999);
+
+    return await this.reservationModel
+      .find({
+        type: type as any,
+        startDate: {
+          $gte: startDate as any,
+          $lte: endDate as any,
+        },
+      })
+      .populate('user')
+      .sort({ startDate: 'asc' })
+      .limit(+limit);
   }
 }
