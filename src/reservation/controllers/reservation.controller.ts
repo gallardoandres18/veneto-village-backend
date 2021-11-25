@@ -2,10 +2,12 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
+import { MongoIdPipe } from 'src/shared/mongo-id.pipe';
 import { TypesOfStadiums } from 'src/types';
 import {
   CreateReservationDTO,
@@ -22,6 +24,11 @@ export class ReservationController {
     return this.reservationService.create(payload);
   }
 
+  @Post('cancel/:reservationId')
+  cancel(@Param('reservationId', MongoIdPipe) reservationId: string) {
+    return this.reservationService.cancel(reservationId);
+  }
+
   @Get('reservated-hours')
   getReservatedHours(@Query('type') type: TypesOfStadiums) {
     return this.reservationService.getReservatedHours(type);
@@ -30,6 +37,11 @@ export class ReservationController {
   @Get('by-type')
   getByType(@Query() filters: FilterReservationDTO) {
     return this.reservationService.getByType(filters);
+  }
+
+  @Get('by-user')
+  getByuser(@Query('user') user: string) {
+    return this.reservationService.getByUser(user);
   }
 
   @Get()

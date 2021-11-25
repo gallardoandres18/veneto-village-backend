@@ -79,9 +79,30 @@ export class ReservationService {
           $gte: startDate as any,
           $lte: endDate as any,
         },
+        enabled: true,
       })
       .populate('user')
       .sort({ startDate: 'asc' })
       .limit(+limit);
+  }
+
+  async getByUser(user: string) {
+    return await this.reservationModel.find({ user, enabled: true }).exec();
+  }
+
+  async cancel(reservationId: string) {
+    if (!Boolean(await this.reservationModel.findById(reservationId).count())) {
+      throw new BadRequestException('Reserva no existe');
+    }
+
+    return await this.reservationModel.findByIdAndUpdate(
+      reservationId,
+      {
+        $set: { enabled: false },
+      },
+      {
+        new: true,
+      },
+    );
   }
 }
