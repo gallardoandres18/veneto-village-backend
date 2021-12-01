@@ -7,7 +7,7 @@ import {
   FilterReservationDTO,
 } from '../dtos/reservation.dto';
 import { Reservation } from '../entities/reservation.entity';
-import { getDateNowString } from 'src/utils';
+import { findDuplicate, getDateNowString } from 'src/utils';
 @Injectable()
 export class ReservationService {
   constructor(
@@ -22,7 +22,7 @@ export class ReservationService {
       .find({
         type: reservation.type as any,
         date: getDateNowString(),
-        hours: { $in: reservation.hours },
+        hours: { $in: reservation.hours.slice(1, -1) },
       })
       .count();
 
@@ -43,6 +43,7 @@ export class ReservationService {
 
   async getReservatedHours(typeOfStadium: any) {
     const reservatedHours = [];
+    const startedAndFinishedHours = [];
 
     const reservatedDocuments = await this.reservationModel
       .find({
@@ -53,8 +54,15 @@ export class ReservationService {
       .exec();
 
     reservatedDocuments.forEach((reservatedDocument) => {
-      reservatedHours.push(...reservatedDocument.hours);
+      startedAndFinishedHours.push(reservatedDocument.hours[0]);
+      startedAndFinishedHours.push(
+        reservatedDocument.hours[reservatedDocument.hours.length - 1],
+      );
+
+      reservatedHours.push(...reservatedDocument.hours.slice(1, -1));
     });
+
+    reservatedHours.push(...findDuplicate(startedAndFinishedHours));
 
     return reservatedHours;
   }
