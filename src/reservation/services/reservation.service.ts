@@ -54,17 +54,30 @@ export class ReservationService {
       .exec();
 
     reservatedDocuments.forEach((reservatedDocument) => {
-      startedAndFinishedHours.push(reservatedDocument.hours[0]);
-      startedAndFinishedHours.push(
-        reservatedDocument.hours[reservatedDocument.hours.length - 1],
-      );
-
-      reservatedHours.push(...reservatedDocument.hours.slice(1, -1));
+      const [firstHour, lastHour, middleHours] =
+        this.processHours(reservatedDocument);
+      startedAndFinishedHours.push(firstHour, lastHour);
+      reservatedHours.push(middleHours);
     });
 
     reservatedHours.push(...findDuplicate(startedAndFinishedHours));
 
+    if (startedAndFinishedHours.find((hour) => hour === '08:00')) {
+      reservatedHours.push('08:00');
+    }
+
+    if (startedAndFinishedHours.find((hour) => hour === '00:00')) {
+      reservatedHours.push('00:00');
+    }
+
     return reservatedHours;
+  }
+
+  private processHours(reservatedDocument) {
+    const firstHour = reservatedDocument.hours.shift();
+    const lastHour = reservatedDocument.hours.pop();
+
+    return [firstHour, lastHour, ...reservatedDocument.hours];
   }
 
   async getAll() {
