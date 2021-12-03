@@ -56,8 +56,9 @@ export class ReservationService {
     reservatedDocuments.forEach((reservatedDocument) => {
       const [firstHour, lastHour, middleHours] =
         this.processHours(reservatedDocument);
+
       startedAndFinishedHours.push(firstHour, lastHour);
-      reservatedHours.push(middleHours);
+      reservatedHours.push(...middleHours);
     });
 
     reservatedHours.push(...findDuplicate(startedAndFinishedHours));
@@ -77,7 +78,7 @@ export class ReservationService {
     const firstHour = reservatedDocument.hours.shift();
     const lastHour = reservatedDocument.hours.pop();
 
-    return [firstHour, lastHour, ...reservatedDocument.hours];
+    return [firstHour, lastHour, reservatedDocument.hours];
   }
 
   async getAll() {
