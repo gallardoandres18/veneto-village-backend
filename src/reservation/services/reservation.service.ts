@@ -7,7 +7,7 @@ import {
   FilterReservationDTO,
 } from '../dtos/reservation.dto';
 import { Reservation } from '../entities/reservation.entity';
-import { findDuplicate, getDateNowString } from 'src/utils';
+import { findDuplicate, getDateNowString, NUMBER_OF_STADIUM } from 'src/utils';
 @Injectable()
 export class ReservationService {
   constructor(
@@ -23,6 +23,7 @@ export class ReservationService {
         type: reservation.type as any,
         date: getDateNowString(),
         hours: { $in: reservation.hours.slice(1, -1) },
+        enabled: true
       })
       .count();
 
@@ -93,10 +94,11 @@ export class ReservationService {
     const { type, limit } = filters;
     const startDate = new Date().setHours(0, 0, 0, 0);
     const endDate = new Date().setHours(23, 59, 59, 999);
+    const typeRegexp = new RegExp('^' + type);
 
-    return await this.reservationModel
+    const reservations = await this.reservationModel
       .find({
-        type: type as any,
+        type: typeRegexp,
         startDate: {
           $gte: startDate as any,
           $lte: endDate as any,
@@ -106,6 +108,14 @@ export class ReservationService {
       .populate('user')
       .sort({ startDate: 'asc' })
       .limit(+limit);
+
+    return reservations.map((reservation) => ({
+      user: reservation.user,
+      number: NUMBER_OF_STADIUM[reservation.type],
+      hour: `${reservation.hours[0]} a ${
+        reservation.hours[reservation.hours.length - 1]
+      } hs`,
+    }));
   }
 
   async getByUser(user: string) {

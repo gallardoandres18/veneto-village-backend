@@ -46,6 +46,6 @@ export class UserService {
       throw new NotFoundException('User doesnt exist');
     }
 
-    return { userId: user[0]._id };
+    return user[0];
   }
 }

@@ -23,9 +23,8 @@ export class CreateReservationDTO {
 }
 
 export class FilterReservationDTO {
-  @IsEnum(TypesOfStadiums)
   @IsNotEmpty()
-  readonly type: TypesOfStadiums;
+  readonly type: string;
 
   @IsOptional()
   readonly limit: number;
