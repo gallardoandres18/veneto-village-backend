@@ -39,4 +39,8 @@ export class UserDto {
   @IsString()
   @IsNotEmpty()
   readonly apartment: string;
+
+  @IsString()
+  @IsOptional()
+  readonly owner: string;
 }

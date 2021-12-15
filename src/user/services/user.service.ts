@@ -17,10 +17,10 @@ export class UserService {
   async createUsers(users = userInitialData) {
     await this.userModel.bulkWrite(
       users.map((user) => {
-        const { apartment, floor, tower, pin, wing } = user;
+        const { apartment, floor, tower, pin, wing, name } = user;
         return {
           updateOne: {
-            filter: { tower, apartment, floor, pin, wing },
+            filter: { tower, apartment, floor, pin, wing, name },
             update: user,
             upsert: true,
           },

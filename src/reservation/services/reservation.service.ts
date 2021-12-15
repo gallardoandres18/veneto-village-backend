@@ -23,7 +23,7 @@ export class ReservationService {
         type: reservation.type as any,
         date: getDateNowString(),
         hours: { $in: reservation.hours.slice(1, -1) },
-        enabled: true
+        enabled: true,
       })
       .count();
 
@@ -86,7 +86,7 @@ export class ReservationService {
     return await this.reservationModel
       .find()
       .populate('user')
-      .sort({ date: 'desc' })
+      .sort({ created: 'desc' })
       .exec();
   }
 
