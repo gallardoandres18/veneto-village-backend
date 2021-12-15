@@ -119,7 +119,15 @@ export class ReservationService {
   }
 
   async getByUser(user: string) {
-    return await this.reservationModel.find({ user, enabled: true }).exec();
+    return await this.reservationModel
+      .find({
+        user,
+        enabled: true,
+        created: {
+          $gte: new Date((new Date() as any) - 7 * 60 * 60 * 24 * 1000),
+        },
+      })
+      .exec();
   }
 
   async cancel(reservationId: string) {
