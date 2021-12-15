@@ -2466,7 +2466,7 @@ export const userInitialData: IUser[] = [
     wing: 2,
     floor: 3,
     apartment: 'A',
-    pin: 0821,
+    pin: 5221,
     identityNumber: '38500821',
     name: 'Andres Gallardo',
     owner: 'Andres Gallardo',
