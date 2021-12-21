@@ -23,7 +23,6 @@ export class UserDto {
 
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
   readonly floor: number;
 
   @IsNumber()
