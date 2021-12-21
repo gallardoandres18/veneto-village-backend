@@ -1,4 +1,4 @@
-import { IUser } from 'src/types';
+import { IUser } from '../types';
 
 export const userInitialData: IUser[] = [
   {

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IUser } from 'src/types';
+import { IUser } from '../../types';
 import { userInitialData } from '../data';
 import { UserDto } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';

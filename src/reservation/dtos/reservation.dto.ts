@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsNumber,
 } from 'class-validator';
-import { TypesOfStadiums } from 'src/types';
+import { TypesOfStadiums } from '../../types';
 
 export class CreateReservationDTO {
   @IsEnum(TypesOfStadiums)

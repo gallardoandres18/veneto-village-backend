@@ -4,7 +4,7 @@ import {
   PayloadTooLargeException,
   Post,
 } from '@nestjs/common';
-import { IUser } from 'src/types';
+import { IUser } from '../../types';
 import { UserDto } from '../dtos/user.dto';
 import { UserService } from '../services/user.service';
 

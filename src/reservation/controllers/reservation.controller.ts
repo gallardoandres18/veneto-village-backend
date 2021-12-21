@@ -7,8 +7,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { MongoIdPipe } from 'src/shared/mongo-id.pipe';
-import { TypesOfStadiums } from 'src/types';
+import { MongoIdPipe } from '../../../src/shared/mongo-id.pipe';
+import { TypesOfStadiums } from '../../../src/types';
 import {
   CreateReservationDTO,
   FilterReservationDTO,

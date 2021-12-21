@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { TypesOfStadiums } from 'src/types';
-import { User } from 'src/user/entities/user.entity';
+import { TypesOfStadiums } from '../../types';
+import { User } from '../../user/entities/user.entity';
 
 @Schema()
 export class Reservation extends Document {

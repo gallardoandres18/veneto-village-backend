@@ -7,7 +7,11 @@ import {
   FilterReservationDTO,
 } from '../dtos/reservation.dto';
 import { Reservation } from '../entities/reservation.entity';
-import { findDuplicate, getDateNowString, NUMBER_OF_STADIUM } from 'src/utils';
+import {
+  findDuplicate,
+  getDateNowString,
+  NUMBER_OF_STADIUM,
+} from '../../utils';
 @Injectable()
 export class ReservationService {
   constructor(
