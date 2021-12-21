@@ -11,10 +11,10 @@ import config from '../config';
         const { connection, dbName, host, password, port, user } =
           configService.mongo;
         return {
-          uri: `${connection}://${host}:${port}`,
-          user,
-          pass: password,
-          dbName,
+          uri: `mongodb://localhost:27017`,
+          user: 'root',
+          pass: 'root',
+          dbName: 'veneto-village',
         };
       },
       inject: [config.KEY],
