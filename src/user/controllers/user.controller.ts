@@ -23,4 +23,9 @@ export class UserController {
   createInitialData() {
     this.userService.createUsers();
   }
+
+  @Post('update-pins')
+  updatePins() {
+    this.userService.updatePins();
+  }
 }

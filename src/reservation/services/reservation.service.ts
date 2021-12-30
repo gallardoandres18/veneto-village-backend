@@ -149,4 +149,8 @@ export class ReservationService {
       },
     );
   }
+
+  async clearAll() {
+    await this.reservationModel.deleteMany();
+  }
 }

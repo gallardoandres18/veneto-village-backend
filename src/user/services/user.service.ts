@@ -29,6 +29,10 @@ export class UserService {
     );
   }
 
+  async updatePins() {
+    await this.userModel.updateMany({}, { $set: { pin: 1234 } });
+  }
+
   async validateUser(payload: UserDto) {
     const { pin, tower, floor, apartment, wing } = payload;
 

@@ -29,6 +29,11 @@ export class ReservationController {
     return this.reservationService.cancel(reservationId);
   }
 
+  @Post('clear-all')
+  clearAll() {
+    return this.reservationService.clearAll();
+  }
+
   @Get('reservated-hours')
   getReservatedHours(@Query('type') type: TypesOfStadiums) {
     return this.reservationService.getReservatedHours(type);
