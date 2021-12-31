@@ -96,7 +96,7 @@ export class ReservationService {
 
   async getByType(filters: FilterReservationDTO) {
     const { type, limit } = filters;
-    const startDate = new Date().setHours(0, 0, 0, 0);
+    const startDate = new Date();
     const endDate = new Date().setHours(23, 59, 59, 999);
     const typeRegexp = new RegExp('^' + type);
 
